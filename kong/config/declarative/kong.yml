@@ -1,0 +1,37 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+- host: mockbin.org
+  name: example_service
+  port: 80
+  protocol: http
+  routes:
+  - name: example_route
+    paths:
+    - /mock2
+    strip_path: true
+
+- host: host.docker.internal
+  name: go_api
+  port: 3000
+  protocol: http
+  routes:
+  - name: go_api
+    paths:
+    - /go
+    strip_path: true
+
+plugins:
+- name: jwt
+  service: go_api
+  enabled: true
+  config:
+    key_claim_name: kid
+    claims_to_verify:
+    - exp
+consumers:
+  - username: user-name
+jwt_secrets:
+  - consumer: user-name
+    secret: "47769388-abe0-11ed-afa1-0242ac120002"
